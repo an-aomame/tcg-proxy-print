@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+<head>
+  <title>TCG Proxy Print</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/3.2.0/sanitize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+  <style>
+    @page {
+      size: A4;
+      margin: 0;
+    }
+    .page {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      width: 210mm;
+      height: 297mm;
+      padding: 16mm 10.5mm;
+      page-break-after: always;
+    }
+    .card {
+      width: 63mm;
+      height: 88mm;
+      overflow: hidden;
+      position: relative;
+      background: #E6B89C;
+    }
+    .card_image {
+      width: 63mm;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .rotate {
+      transform: rotate(90deg) translate(-63mm, 0);
+      transform-origin: left bottom 0;
+      width: auto;
+      height: 63mm;
+    }
+    @media print {
+      body {
+        width: 210mm;
+      }
+      .nav,
+      .card_icons,
+      .card_input,
+      .newcard {
+        display: none;
+      }
+    }
+    @media screen {
+      body {
+        background: gray;
+        padding: 2mm 0;
+      }
+      .page {
+        background: #FFFFFF;
+        margin: 2mm auto;
+      }
+      .nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        background: #9CAFB7;
+        border-bottom-left-radius: 20px;
+      }
+      .nav_link {
+        color: #20172C;
+        display: inline-block;
+        padding: 20px 20px 25px 25px;
+      }
+      .card_icons {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: rgba(255, 255, 255, 0.3);
+      }
+      .card_icon {
+        cursor: pointer;
+        padding: 8px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 4px;
+      }
+      .card_input {
+        position: absolute;
+        bottom: 40mm;
+        left: 10px;
+        right: 10px;
+        width: calc(100% - 20px);
+        background-color: rgba(255, 255, 255, 0.7);
+        font-size: 10pt;
+      }
+      .newcard {
+        cursor: pointer;
+        text-align: center;
+        line-height: 88mm;
+      }
+      .newcard_icon {
+        vertical-align: middle;
+      }
+    }
+  </style>
+</head>
+<body>
+  <cards></cards>
+
+  <script type="riot/tag">
+    <cards>
+      <nav class="nav" show={ cards.length > 0 }>
+        <a class="nav_link" href="javascript:window.print()" title="print"><i class="nav_icon fa fa-print fa-2x"></i></a>
+      </nav>
+
+      <section class="page" each={ packet in packets }>
+        <div class="card" each={ card in packet }>
+          <img class={ card_image: true, rotate: card.rotate } src={ card.src }>
+          <div class="card_icons">
+            <i class="card_icon fa fa-clone" title="clone" onclick={ parent.clone }></i>
+            <i class="card_icon fa fa-times" title="remove" onclick={ parent.remove }></i>
+          </div>
+          <input class="card_input" type="text" value={ card.src } onchange={ parent.load } onclick={ selectAll }>
+        </div>
+        <div class="card newcard" title="add" onclick={ add } if={ packet.length < 9 }>
+          <i class="newcard_icon fa fa-plus-circle fa-3x"></i>
+        </div>
+      </section>
+
+      <section class="page" if={ cards.length % 9 == 0 }>
+        <div class="card newcard" title="add" onclick={ add }>
+          <i class="newcard_icon fa fa-plus-circle fa-3x"></i>
+        </div>
+      </section>
+
+      this.id = 0
+      this.cards = []
+      this.packets = []
+
+      this.on('update', function() {
+        var i = 0
+        var count = this.cards.length
+
+        this.packets = []
+        while (i * 9 < count) {
+          this.packets.push(this.cards.slice(i * 9, ++i * 9))
+        }
+      })
+
+      indexOf(card) {
+        return this.cards.map(function(c) { return c.id }).indexOf(card.id)
+      }
+
+      add(e) {
+        this.cards.push({
+          id: ++this.id,
+          src: 'http://placehold.jp/700x978.png',
+          rotate: false
+        })
+      }
+
+      clone(e) {
+        var card = e.item.card
+        var clone = Object.assign({}, card)
+        clone.id = ++this.id
+        this.cards.splice(this.indexOf(card), 0, clone)
+      }
+
+      remove(e) {
+        var card = e.item.card
+        this.cards.splice(this.indexOf(card), 1)
+      }
+
+      load(e) {
+        var card = e.item.card
+        var url = e.target.value
+        var target = this.cards[this.indexOf(card)]
+        var _this = this
+        var img = new Image()
+
+        e.preventUpdate = true
+
+        img.onload = function() {
+          target.rotate = img.width > img.height
+          target.src = url
+          _this.update()
+        }
+        img.src = url
+      }
+
+      selectAll(e) {
+        e.preventUpdate = true
+        e.target.select(0, e.target.value.length)
+      }
+    </cards>
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.5.0/riot+compiler.min.js"></script>
+  <script>riot.mount('cards')</script>
+</body>
+</html>
