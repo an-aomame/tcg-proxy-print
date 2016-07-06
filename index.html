@@ -44,7 +44,8 @@
       .nav,
       .card_icons,
       .card_input,
-      .newcard {
+      .newcard,
+      .newpage {
         display: none;
       }
     }
@@ -124,7 +125,7 @@
         </div>
       </section>
 
-      <section class="page" if={ cards.length % 9 == 0 }>
+      <section class="page newpage" if={ cards.length % 9 == 0 }>
         <div class="card newcard" title="add" onclick={ add }>
           <i class="newcard_icon fa fa-plus-circle fa-3x"></i>
         </div>
