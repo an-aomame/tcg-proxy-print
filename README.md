@@ -20,15 +20,19 @@ https://an-aomame.github.io/tcg-proxy-print/
 
 以下の環境で動作確認しています。これ以外の環境でも動くかもしれないですし、動かないかもしれません。
 
-* デスクトップ版 (Mac)
+* Windows
+  * Google Chrome
+  * Microsoft Edge (※)
+  * Internet Explorer 11 (※)
+* Mac
   * Google Chrome
   * Firefox
 
-Win でも確認する予定（後日）
+(※) 最終ページが9枚埋まっている場合に白紙が追加される問題あり
 
 ## ライセンス
 
-CC0 1.0 Universal
+CC0 1.0 Universal  
 https://creativecommons.org/publicdomain/zero/1.0/deed.ja
 
 ご自由にお使いください
