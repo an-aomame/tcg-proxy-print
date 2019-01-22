@@ -2,8 +2,8 @@
 <html>
 <head>
   <title>TCG Proxy Print</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/3.2.0/sanitize.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     @page {
       size: A4;
@@ -22,7 +22,6 @@
       height: 88mm;
       overflow: hidden;
       position: relative;
-      background: #E6B89C;
     }
     .card_image {
       width: 63mm;
@@ -92,11 +91,14 @@
         font-size: 10pt;
         font-family: arial, sans-serif;
         text-align: center;
+        border: none;
+        min-height: 1.5em;
       }
       .newcard {
         cursor: pointer;
         text-align: center;
         line-height: 88mm;
+        background: #E6B89C;
       }
       .newcard_icon {
         vertical-align: middle;
@@ -220,7 +222,7 @@
     </cards>
   </script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.5.0/riot+compiler.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/3.13.2/riot+compiler.min.js"></script>
   <script>riot.mount('cards')</script>
 </body>
 </html>
